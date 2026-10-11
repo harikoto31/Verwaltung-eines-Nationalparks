@@ -1,47 +1,19 @@
-# A Nationalpark Manager
+# Verwaltung eines Nationalparks
 
-A desktop application to manage staff and animals in a national park,
-built with C++ (logic) and Qt Framework (GUI)
+A desktop application for managing the staff, animals and trail network of a national park, built with C++ for the logic and the Qt framework for the GUI. It was one of my first projects combining a separate logic layer with a graphical interface, and it grew from simple lists into a small management tool with graph algorithms on the park's trail network.
 
-## What it does
+- Manages three types of staff (rangers, administration, scientists) and three types of animals (mammals, birds, reptiles), each with their own attributes
+- Adds and edits entries through dialogs for each type
+- Filters the lists by type with checkboxes and shows all details of an entry as a tooltip on hover
+- Sorts staff by personnel number, salary or distance to a reference salary, and animals by name, age or distance to a reference age, ascending or descending with a live preview
+- Shows statistics such as endangered animals, predators, venomous reptiles or full-time staff
+- Saves and loads both lists as JSON with nlohmann/json (earlier versions used a binary file and CSV)
+- Draws the trail network as a map with locations and trails, loaded from JSON
+- Blocks and unblocks trails, which then appear greyed out and are ignored by the algorithms below
+- Marks every location reachable from a starting point with breadth-first search
+- Finds the shortest route between two locations with Dijkstra's algorithm and highlights it in red along with the total distance
+- Has a menu bar, toolbar, status bar messages, window modes and an exit confirmation, styled with a Qt stylesheet
 
-- Manage and display a list of park employees:
-   *You can add employees and it will be printed in the given list window
-   *You can save your list in a csv-file `Personal.csv`
-   *You can load it afterwards
-- Manage and display a list of animals in the park
-   *You can add animals and it will be printed in the given list window
-   *You can save your list in a binary file `datei.bin`
-   *You can load it afterwards
-- Clean and intuitive GUI designed with Qt and CSS
-- The saved staff list can be found in `build/Desktop_Qt_6_9_3_MinGW_64_bit-Debug/NationalparkGUI/Personal.csv`
-- The saved animal list can be found in `build/Desktop_Qt_6_9_3_MinGW_64_bit-Debug/NationalparkGUI/datei.bin`
+The project is split into two qmake subprojects. The logic layer is a static library in pure C++ without any Qt dependency, and the GUI layer links against it. Staff and animals are built on the abstract base classes `Angestellter` and `Spezies`, whose virtual functions (`getInfo`, `toJson`, `ausgabeTooltip`) let the GUI treat every type the same way. The trail network is stored as a graph with an adjacency list, which both algorithms work on, while the map is drawn with `QGraphicsScene`.
 
-## Architecture
-
-The project follows a clear separation of concerns:
-
-- **Logic layer** (`NationalPark.pro`) — handles all data and business logic in pure C++
-- **GUI layer** (`NationalparkGUI.pro`) — handles all user interface with Qt
-- The two layers are connected with an instance of the employee list class and an instance of the animal list class in the GUI layer
-
-This separation makes the code maintainable and easy to extend.
-
-## Tech Stack
-
-- C++
-- Qt Framework (GUI)
-- qmake (build system)
-- CSS (main window styling)
-
-## How to run
-
-1. Open `NationalparkProjekt.pro` in Qt Creator
-2. Build with qmake (Desktop Qt 6.9.3 MinGW 64-bit)
-3. The compiled application is located at:
-   `build/Desktop_Qt_6_9_3_MinGW_64_bit-Debug/NationalparkProjekt`
-
-## Context
-
-One of my first projects, where I combine logic and GUI.
-It demonstrates layered architecture with C++ and Qt Framework.
+Antsa Haritiana Ramparany, computer science student at Hochschule Darmstadt (h_da), Germany
